@@ -109,16 +109,16 @@ const sketch = (p5: P5) => {
                 hideWallsIn2s();
             }
 
-            if (p5.keyIsDown(81)) {
+            if (p5.keyIsDown(81) || p5.keyIsDown(37)) {
                 vect.x += -DELTA
             }
-            if (p5.keyIsDown(68)) {
+            if (p5.keyIsDown(68) || p5.keyIsDown(39)) {
                 vect.x += DELTA
             }
-            if (p5.keyIsDown(83)) {
+            if (p5.keyIsDown(83) || p5.keyIsDown(40)) {
                 vect.y += DELTA
             }
-            if (p5.keyIsDown(90)) {
+            if (p5.keyIsDown(90) || p5.keyIsDown(38)) {
                 vect.y += -DELTA
             }
 
