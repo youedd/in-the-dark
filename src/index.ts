@@ -2,7 +2,7 @@ import P5 from "p5";
 import { Cell, CellConfig } from "./cell"
 import { Pawn } from "./pawn";
 import { Debugger } from "./debugger";
-
+import collide from 'line-circle-collision'
 
 const _index = (rows: number, cols: number) => (i: number, j: number) => {
     if (i < 0 || j < 0 || i > rows - 1 || j > cols - 1) {
@@ -35,23 +35,10 @@ const removeWalls = (a: Cell, b: Cell) => {
 const sketch = (p5: P5) => {
     const HEIGHT = 900;
     const WIDTH = 900;
-    let deltaX = 0;
-    let deltaY = 0;
+    const DELTA = 4
+    const DELTA_COS_45 = DELTA * Math.cos(Math.PI / 4)
+    const DELTA_SIN_45 = DELTA * Math.cos(Math.PI / 4)
 
-    function keyPressed() {
-        deltaX = 0;
-        deltaY = 0;
-        if (!p5.keyIsPressed) return
-        if (p5.keyCode === p5.LEFT_ARROW) {
-            deltaX = -1;
-        } else if (p5.keyCode === p5.RIGHT_ARROW) {
-            deltaX = 1;
-        } else if (p5.keyCode === p5.DOWN_ARROW) {
-            deltaY = 1;
-        } else if (p5.keyCode === p5.UP_ARROW) {
-            deltaY = -1;
-        }
-    }
 
     const config: CellConfig = {
         w: 100,
@@ -96,19 +83,65 @@ const sketch = (p5: P5) => {
             }
         }
 
-        pawn = new Pawn(50, 250, config);
+        pawn = new Pawn(config.w / 2, config.w / 2, config);
+        
     };
+    function updatePawn() {
+
+        const dx = p5.mouseX - pawn.pos.x;
+        const dy = p5.mouseY - pawn.pos.y;
+
+        const angle = Math.atan2(dy, dx);
+
+        const i0 = Math.floor(pawn.pos.y / config.w);
+        const j0 = Math.floor(pawn.pos.x / config.w);
+
+
+        if (p5.keyIsPressed) {
+            const vect = new P5.Vector();
+            if (p5.keyIsDown(81)) {
+                vect.x += -DELTA
+            }
+            if (p5.keyIsDown(68)) {
+                vect.x += DELTA
+            }
+            if (p5.keyIsDown(83)) {
+                vect.y += DELTA
+            }
+            if (p5.keyIsDown(90)) {
+                vect.y += -DELTA
+            }
+
+            if (vect.y || vect.x) {
+                vect.setMag(DELTA);
+                // vect.rotate(angle);
+                const newPos = vect.add(pawn.pos);
+
+                const cell = grid[config.index(i0, j0)];
+                let update = true;
+                for (const wall of cell.walls) {
+                    if (wall && collide([wall.a.x, wall.a.y], [wall.b.x, wall.b.y], [newPos.x, newPos.y], DELTA)) {
+                        update = false;
+                        break;
+                    }
+
+                }
+                if (update)
+                    pawn.pos.set(vect);
+            }
+
+        }
+
+        pawn.updateVisionAngle(angle);
+    }
 
     const draw = () => {
-        keyPressed()
         p5.background(0, 70, 0);
         for (var i = 0; i < grid.length; i++) {
             grid[i].show(p5);
         }
-        if (p5.keyIsPressed) {
-            pawn.move(deltaX, deltaY)
-        }
-        pawn.updateVisionAngle(p5.mouseX, p5.mouseY);
+        updatePawn();
+
         pawn.show(p5, grid);
         pawn.showVision(p5, grid)
     }

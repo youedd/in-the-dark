@@ -3143,6 +3143,13 @@ levenary@^1.1.1:
   dependencies:
     leven "^3.1.0"
 
+line-circle-collision@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/line-circle-collision/-/line-circle-collision-1.1.3.tgz#a431b78e1cad7093399e8df69825edb683aa5f69"
+  integrity sha1-pDG3jhytcJM5no32mCXttoOqX2k=
+  dependencies:
+    point-circle-collision "^1.0.0"
+
 loader-runner@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.4.0.tgz#ed47066bfe534d7e84c4c7b9998c2a75607d9357"
@@ -3751,6 +3758,11 @@ pkg-dir@^3.0.0:
   integrity sha512-/E57AYkoeQ25qkxMj5PBOVgF8Kiu/h7cYS30Z5+R7WaiCCBfLq58ZI/dSeaEKb9WVJV5n/03QwrN3IeWIFllvw==
   dependencies:
     find-up "^3.0.0"
+
+point-circle-collision@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/point-circle-collision/-/point-circle-collision-1.0.3.tgz#2add1176a6128c07c7674e9d22e664f6f3ff1a1b"
+  integrity sha1-Kt0RdqYSjAfHZ06dIuZk9vP/Ghs=
 
 portfinder@^1.0.26:
   version "1.0.26"

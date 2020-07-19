@@ -28,16 +28,8 @@ export class Pawn {
         }
     }
 
-    move(dx: number, dy: number) {
-        this.pos.set(this.pos.x + dx, this.pos.y + dy);
-    }
-
-    updateVisionAngle(x: number, y: number) {
-        const dx = x - this.pos.x;
-        const dy = y - this.pos.y;
-
-        this.angle = Math.atan2(dy, dx);
-        this.rays.forEach(ray => ray.rotate(this.angle))
+    updateVisionAngle(angle: number) {
+        this.rays.forEach(ray => ray.rotate(angle))
     }
 
     showRays(p5: P5, walls: Wall[]) {
