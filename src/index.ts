@@ -3,6 +3,7 @@ import { Cell, CellConfig } from "./cell"
 import { Pawn } from "./pawn";
 import { Debugger } from "./debugger";
 import collide from 'line-circle-collision'
+import { debounce } from "./utils";
 
 const _index = (rows: number, cols: number) => (i: number, j: number) => {
     if (i < 0 || j < 0 || i > rows - 1 || j > cols - 1) {
@@ -38,7 +39,9 @@ const sketch = (p5: P5) => {
     const DELTA = 4
     const DELTA_COS_45 = DELTA * Math.cos(Math.PI / 4)
     const DELTA_SIN_45 = DELTA * Math.cos(Math.PI / 4)
+    let wallsVisible = false;
 
+    const hideWallsIn2s = debounce(() => wallsVisible = false, 60);
 
     const config: CellConfig = {
         w: 100,
@@ -101,6 +104,11 @@ const sketch = (p5: P5) => {
 
         if (p5.keyIsPressed) {
             const vect = new P5.Vector();
+            if (p5.keyIsDown(72)) {
+                wallsVisible = true;
+                hideWallsIn2s();
+            }
+
             if (p5.keyIsDown(81)) {
                 vect.x += -DELTA
             }
@@ -140,7 +148,7 @@ const sketch = (p5: P5) => {
     const draw = () => {
         p5.background(0, 70, 0);
         for (var i = 0; i < grid.length; i++) {
-            grid[i].show(p5);
+            grid[i].show(p5, wallsVisible);
         }
         updatePawn();
 

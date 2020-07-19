@@ -67,18 +67,16 @@ export class Cell {
         return null;
     }
 
-    show(p5: P5) {
-
+    show(p5: P5, wallsVisible: boolean) {
         const { w } = this.config;
-
-
-        p5.stroke(255);
-        p5.stroke(255);
-        this.walls.forEach((wall, ind) => {
-            if (wall) {
-                wall.show(p5)
-            }
-        })
+        if (wallsVisible) {
+            p5.stroke(255);
+            this.walls.forEach((wall) => {
+                if (wall) {
+                    wall.show(p5)
+                }
+            })
+        }
 
         if (this.visited) {
             p5.noStroke();

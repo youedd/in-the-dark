@@ -14,6 +14,6 @@ export class Wall {
     }
 
     show(p5: P5) {
-        // p5.line(this.a.x, this.a.y, this.b.x, this.b.y)
+        p5.line(this.a.x, this.a.y, this.b.x, this.b.y)
     }
 }
