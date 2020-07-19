@@ -19,7 +19,7 @@ export class Debugger {
 
         if (Debugger.isLocked) return
 
-        console.log(args);
+        debugger;
     }
 }
 
