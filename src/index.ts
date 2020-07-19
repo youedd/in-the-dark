@@ -34,6 +34,23 @@ const removeWalls = (a: Cell, b: Cell) => {
 const sketch = (p5: P5) => {
     const HEIGHT = 900;
     const WIDTH = 900;
+    let deltaX = 0;
+    let deltaY = 0;
+
+    function keyPressed() {
+        deltaX = 0;
+        deltaY = 0;
+        if (!p5.keyIsPressed) return
+        if (p5.keyCode === p5.LEFT_ARROW) {
+            deltaX = -1;
+        } else if (p5.keyCode === p5.RIGHT_ARROW) {
+            deltaX = 1;
+        } else if (p5.keyCode === p5.DOWN_ARROW) {
+            deltaY = 1;
+        } else if (p5.keyCode === p5.UP_ARROW) {
+            deltaY = -1;
+        }
+    }
 
     const config: CellConfig = {
         w: 100,
@@ -83,9 +100,13 @@ const sketch = (p5: P5) => {
 
     // The sketch draw method
     p5.draw = () => {
+        keyPressed()
         p5.background(0, 70, 0);
         for (var i = 0; i < grid.length; i++) {
             grid[i].show(p5);
+        }
+        if (p5.keyIsPressed) {
+            pawn.move(deltaX, deltaY)
         }
         pawn.updateVisionAngle(p5.mouseX, p5.mouseY);
         pawn.show(p5, grid);

@@ -27,8 +27,8 @@ export class Pawn {
         }
     }
 
-    update(x: number, y: number) {
-        this.pos.set(x, y);
+    move(dx: number, dy: number) {
+        this.pos.set(this.pos.x + dx, this.pos.y + dy);
     }
 
     updateVisionAngle(x: number, y: number) {
@@ -79,11 +79,13 @@ export class Pawn {
         for (let i = min_i; i < max_i; i++) {
             for (let j = min_j; j < max_j; j++) {
                 const cell = grid[this.config.index(i, j)];
-                cell.walls.forEach(wall => {
-                    if (wall) {
-                        walls.push(wall)
-                    }
-                })
+                if (cell) {
+                    cell.walls.forEach(wall => {
+                        if (wall) {
+                            walls.push(wall)
+                        }
+                    })
+                }
             }
         }
         this.showRays(p5, walls);
