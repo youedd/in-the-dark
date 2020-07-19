@@ -1,5 +1,5 @@
 import P5 from "p5";
-
+import { Wall } from "./wall";
 
 export interface CellConfig {
     w: number,
@@ -12,16 +12,27 @@ export interface CellConfig {
 export class Cell {
     i: number;
     j: number;
+    x: number;
+    y: number;
     grid: Cell[]
     visited: boolean;
-    walls: [boolean, boolean, boolean, boolean];
+    walls: Array<Wall | null>;
     config: CellConfig
 
     constructor(i: number, j: number, grid: Cell[], config: CellConfig) {
+        const y = i * config.w;
+        const x = j * config.w;
+        this.x = x;
+        this.y = y;
         this.i = i;
         this.j = j;
         this.visited = false;
-        this.walls = [true, true, true, true];
+        this.walls = [
+            new Wall(x, y, x, y + config.w),
+            new Wall(x, y + config.w, x + config.w, y + config.w),
+            new Wall(x + config.w, y + config.w, x + config.w, y),
+            new Wall(x + config.w, y, x, y),
+        ];
         this.config = config;
         this.grid = grid;
     }
@@ -30,10 +41,10 @@ export class Cell {
         const { index } = this.config;
         const neighbors = [];
 
-        const top = this.grid[index(this.i, this.j - 1)];
-        const right = this.grid[index(this.i + 1, this.j)];
-        const bottom = this.grid[index(this.i, this.j + 1)];
-        const left = this.grid[index(this.i - 1, this.j)];
+        const top = this.grid[index(this.i - 1, this.j)];
+        const right = this.grid[index(this.i, this.j + 1)];
+        const bottom = this.grid[index(this.i + 1, this.j)];
+        const left = this.grid[index(this.i, this.j - 1)];
 
         if (top && !top.visited) {
             neighbors.push(top);
@@ -60,27 +71,19 @@ export class Cell {
 
         const { w } = this.config;
 
-        const x = this.i * w;
-        const y = this.j * w;
 
         p5.stroke(255);
-        if (this.walls[0]) {
-            p5.line(x, y, x + w, y);
-        }
-        if (this.walls[1]) {
-            p5.line(x + w, y, x + w, y + w);
-        }
-        if (this.walls[2]) {
-            p5.line(x + w, y + w, x, y + w);
-        }
-        if (this.walls[3]) {
-            p5.line(x, y + w, x, y);
-        }
+        p5.stroke(255);
+        this.walls.forEach((wall, ind) => {
+            if (wall) {
+                wall.show(p5)
+            }
+        })
 
         if (this.visited) {
             p5.noStroke();
             p5.fill(40);
-            p5.rect(x, y, w, w);
+            p5.rect(this.x, this.y, w, w);
         }
     }
 

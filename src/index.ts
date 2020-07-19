@@ -3,39 +3,39 @@ import { Cell, CellConfig } from "./cell"
 
 
 const _index = (rows: number, cols: number) => (i: number, j: number) => {
-    if (i < 0 || j < 0 || i > cols - 1 || j > rows - 1) {
+    if (i < 0 || j < 0 || i > rows - 1 || j > cols - 1) {
         return -1;
     }
-    return i + j * cols;
+    return i * cols + j;
 }
 
 const removeWalls = (a: Cell, b: Cell) => {
-    var x = a.i - b.i;
+    const x = a.j - b.j;
     if (x === 1) {
-        a.walls[3] = false;
-        b.walls[1] = false;
+        a.walls[0] = null;
+        b.walls[2] = null;
     } else if (x === -1) {
-        a.walls[1] = false;
-        b.walls[3] = false;
+        a.walls[2] = null;
+        b.walls[0] = null;
     }
-    var y = a.j - b.j;
-    if (y === 1) {
-        a.walls[0] = false;
-        b.walls[2] = false;
-    } else if (y === -1) {
-        a.walls[2] = false;
-        b.walls[0] = false;
+    const y = a.i - b.i;
+    if (y === -1) {
+        a.walls[1] = null;
+        b.walls[3] = null;
+    } else if (y === 1) {
+        a.walls[3] = null;
+        b.walls[1] = null;
     }
 }
 
 
 
 const sketch = (p5: P5) => {
-    const HEIGHT = 800;
-    const WIDTH = 800;
+    const HEIGHT = 900;
+    const WIDTH = 900;
 
     const config: CellConfig = {
-        w: 40,
+        w: 100,
         rows: 0,
         cols: 0,
         index: _index(0, 0),
@@ -53,10 +53,9 @@ const sketch = (p5: P5) => {
 
         config.cols = cols;
         config.rows = rows;
-        config.index = _index(cols, rows);
+        config.index = _index(rows, cols);
 
-        // p5.frameRate(5000);
-
+        for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             for (let i = 0; i < cols; i++) {
                 const cell = new Cell(i, j, grid, config)
