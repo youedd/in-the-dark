@@ -84,7 +84,9 @@ const sketch = (p5: P5) => {
         }
 
         pawn = new Pawn(config.w / 2, config.w / 2, config);
-        
+
+        grid[0].visited = false;
+        grid[grid.length - 1].visited = false;
     };
     function updatePawn() {
 
