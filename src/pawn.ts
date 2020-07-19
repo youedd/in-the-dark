@@ -2,6 +2,7 @@ import { CellConfig, Cell } from "./cell";
 import P5 from "p5";
 import { Ray } from "./ray";
 import { Wall } from "./wall";
+import { Debugger } from "./debugger";
 
 const sqrt1 = Math.sqrt(1)
 export class Pawn {
@@ -13,12 +14,12 @@ export class Pawn {
     rays: Ray[];
     visionLength: number
 
-    constructor(config: CellConfig) {
+    constructor(x: number, y: number, config: CellConfig) {
         this.config = config;
         this.angle = 0;
         this.pos = new P5.Vector()
-        this.pos.x = config.w / 2;
-        this.pos.y = config.w / 2;
+        this.pos.x = x;
+        this.pos.y = y;
         this.size = config.w / 4;
         this.visionLength = this.config.w * 1.5;
         this.rays = [];
@@ -43,7 +44,7 @@ export class Pawn {
         for (let i = 0; i < this.rays.length; i++) {
             const ray = this.rays[i];
             let closest = null;
-            let record = Infinity;
+            let record = this.rays[i].maxLength + 1;
             for (let wall of walls) {
                 const pt = ray.cast(wall);
                 if (pt) {
@@ -68,9 +69,9 @@ export class Pawn {
 
     showVision(p5: P5, grid: Cell[]) {
         const walls: Wall[] = [];
-        const i0 = Math.floor(this.pos.x / this.config.w);
-        const j0 = Math.floor(this.pos.y / this.config.w);
-        const delta = this.visionLength / this.config.w;
+        const i0 = Math.floor(this.pos.y / this.config.w);
+        const j0 = Math.floor(this.pos.x / this.config.w);
+        const delta = Math.ceil(this.visionLength / this.config.w);
         const min_i = i0 - delta < 0 ? 0 : i0 - delta;
         const min_j = j0 - delta < 0 ? 0 : j0 - delta;
         const max_i = i0 + delta > this.config.rows ? this.config.rows : i0 + delta;

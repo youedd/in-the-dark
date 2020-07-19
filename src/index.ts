@@ -1,6 +1,7 @@
 import P5 from "p5";
 import { Cell, CellConfig } from "./cell"
 import { Pawn } from "./pawn";
+import { Debugger } from "./debugger";
 
 
 const _index = (rows: number, cols: number) => (i: number, j: number) => {
@@ -95,7 +96,7 @@ const sketch = (p5: P5) => {
             }
         }
 
-        pawn = new Pawn(config);
+        pawn = new Pawn(50, 250, config);
     };
 
     const draw = () => {
@@ -114,7 +115,7 @@ const sketch = (p5: P5) => {
 
     // The sketch draw method
     p5.redraw = () => {
-        if (Debugger.isLocked()) return
+        if (Debugger.isDebug && Debugger.isLocked) return
         draw();
         Debugger.lock()
     }
