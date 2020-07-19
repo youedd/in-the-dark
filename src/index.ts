@@ -1,5 +1,6 @@
 import P5 from "p5";
 import { Cell, CellConfig } from "./cell"
+import { Pawn } from "./pawn";
 
 
 const _index = (rows: number, cols: number) => (i: number, j: number) => {
@@ -44,6 +45,7 @@ const sketch = (p5: P5) => {
     const grid: Cell[] = [];
     const stack: Cell[] = [];
     let current: Cell | undefined;
+    let pawn: Pawn;
 
     p5.setup = () => {
         // Creating and positioning the canvas
@@ -57,7 +59,6 @@ const sketch = (p5: P5) => {
 
         for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            for (let i = 0; i < cols; i++) {
                 const cell = new Cell(i, j, grid, config)
                 grid.push(cell);
             }
@@ -83,6 +84,8 @@ const sketch = (p5: P5) => {
                 current = stack.pop();
             }
         }
+
+        pawn = new Pawn(config);
     };
 
     // The sketch draw method
@@ -91,7 +94,9 @@ const sketch = (p5: P5) => {
         for (var i = 0; i < grid.length; i++) {
             grid[i].show(p5);
         }
-    }
+            pawn.show(p5, grid);
+            pawn.showWalls(p5, grid)
+        }
 
 };
 
