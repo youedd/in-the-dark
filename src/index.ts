@@ -58,27 +58,20 @@ const sketch = (p5: P5) => {
         config.index = _index(rows, cols);
 
         for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
+            for (let j = 0; j < cols; j++) {
                 const cell = new Cell(i, j, grid, config)
                 grid.push(cell);
             }
         }
         current = grid[0];
-
+        // p5.frameRate(1)
         while (current) {
             current.visited = true;
-            // STEP 1
             const next: Cell | null = current.next();
             if (next) {
                 next.visited = true;
-
-                // STEP 2
                 stack.push(current);
-
-                // STEP 3
                 removeWalls(current, next);
-
-                // STEP 4
                 current = next;
             } else {
                 current = stack.pop();
@@ -94,9 +87,10 @@ const sketch = (p5: P5) => {
         for (var i = 0; i < grid.length; i++) {
             grid[i].show(p5);
         }
-            pawn.show(p5, grid);
-            pawn.showWalls(p5, grid)
-        }
+        pawn.updateVisionAngle(p5.mouseX, p5.mouseY);
+        pawn.show(p5, grid);
+        pawn.showVision(p5, grid)
+    }
 
 };
 

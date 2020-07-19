@@ -3,17 +3,24 @@ import { Wall } from './wall';
 
 export class Ray {
     pos: P5.Vector;
-    dir: P5.Vector;
+    angle: number;
     end: P5.Vector;
     maxLength: number;
 
     constructor(pos: P5.Vector, maxLength: number, angle: number) {
         this.pos = pos;
-        this.dir = P5.Vector.fromAngle(angle);
-        this.end = new P5.Vector();
+        this.angle = angle;
         this.maxLength = maxLength;
-        this.end.x = this.pos.x + this.dir.x * maxLength;
-        this.end.y = this.pos.y + this.dir.y * maxLength;
+        this.end = new P5.Vector();
+        const dir = P5.Vector.fromAngle(angle);
+        this.end.x = this.pos.x + dir.x * maxLength;
+        this.end.y = this.pos.y + dir.y * maxLength;
+    }
+
+    rotate(angle: number) {
+        const dir = P5.Vector.fromAngle(this.angle + angle);
+        this.end.x = this.pos.x + dir.x * this.maxLength;
+        this.end.y = this.pos.y + dir.y * this.maxLength;
     }
 
     cast(wall: Wall) {

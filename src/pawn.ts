@@ -23,12 +23,23 @@ export class Pawn {
         this.visionLength = this.config.w * 1.5;
         this.rays = [];
         for (let a = 0; a < 360; a += 1) {
-            this.rays.push(new Ray(this.pos, this.visionLength, a * Math.PI / 720));
+            this.rays.push(new Ray(this.pos, this.visionLength, (a - 180) * Math.PI / 720));
         }
     }
 
+    update(x: number, y: number) {
+        this.pos.set(x, y);
+    }
 
-    showVision(p5: P5, walls: Wall[]) {
+    updateVisionAngle(x: number, y: number) {
+        const dx = x - this.pos.x;
+        const dy = y - this.pos.y;
+
+        this.angle = Math.atan2(dy, dx);
+        this.rays.forEach(ray => ray.rotate(this.angle))
+    }
+
+    showRays(p5: P5, walls: Wall[]) {
         for (let i = 0; i < this.rays.length; i++) {
             const ray = this.rays[i];
             let closest = null;
@@ -55,7 +66,7 @@ export class Pawn {
         }
     }
 
-    showWalls(p5: P5, grid: Cell[]) {
+    showVision(p5: P5, grid: Cell[]) {
         const walls: Wall[] = [];
         const i0 = Math.floor(this.pos.x / this.config.w);
         const j0 = Math.floor(this.pos.y / this.config.w);
@@ -75,7 +86,7 @@ export class Pawn {
                 })
             }
         }
-        this.showVision(p5, walls);
+        this.showRays(p5, walls);
     }
 
 
