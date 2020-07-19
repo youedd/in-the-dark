@@ -98,8 +98,7 @@ const sketch = (p5: P5) => {
         pawn = new Pawn(config);
     };
 
-    // The sketch draw method
-    p5.draw = () => {
+    const draw = () => {
         keyPressed()
         p5.background(0, 70, 0);
         for (var i = 0; i < grid.length; i++) {
@@ -111,6 +110,13 @@ const sketch = (p5: P5) => {
         pawn.updateVisionAngle(p5.mouseX, p5.mouseY);
         pawn.show(p5, grid);
         pawn.showVision(p5, grid)
+    }
+
+    // The sketch draw method
+    p5.redraw = () => {
+        if (Debugger.isLocked()) return
+        draw();
+        Debugger.lock()
     }
 
 };
